@@ -1,57 +1,191 @@
-# Sample Hardhat 3 Project (`mocha` and `ethers`)
+# Message dApp — Blockchain Message Board
 
-This project showcases a Hardhat 3 project using `mocha` for tests and the `ethers` library for Ethereum interactions.
+A decentralized application (dApp) that allows users to read and update a message stored on the Ethereum blockchain. Built with Solidity, Hardhat, Next.js, and ethers.js, with MetaMask wallet integration.
 
-To learn more about Hardhat 3, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3](https://hardhat.org/hardhat3-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+## Features
 
-## Project Overview
+- **Read blockchain data:** Retrieve the current message from the deployed smart contract.
+- **Update messages:** Submit blockchain transactions through MetaMask.
+- **Wallet integration:** Connect using an Ethereum-compatible wallet.
+- **Transaction history:** View previous message updates, wallet addresses, block numbers, and transaction hashes.
+- **Network validation:** Detect an incorrect network before submitting an update.
+- **Transaction feedback:** Display transaction progress, success, and error messages.
+- **Smart contract tests:** Test message reading, updating, and access from different wallets.
 
-This example project includes:
+## Screenshots
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using `mocha` and ethers.js
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+### Main Interface
 
-## Usage
+![Message dApp interface](screenshots/dapp-interface.png)
 
-### Running Tests
+### Connected Wallet
 
-To run all the tests in the project, execute the following command:
+![Connected wallet](screenshots/wallet-connected.png)
 
-```shell
+### Successful Message Update
+
+![Message update](screenshots/message-updated.png)
+
+### Blockchain Message History
+
+![Blockchain message history](screenshots/message-history.png)
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Solidity | Smart contract development |
+| Hardhat 3 | Local blockchain development and testing |
+| Next.js | Frontend application |
+| React | User interface |
+| TypeScript | Type-safe application code |
+| ethers.js | Blockchain communication |
+| MetaMask | Wallet connection and transaction approval |
+| Tailwind CSS | Interface styling |
+
+## Project Structure
+
+```text
+message-dapp/
+├── contracts/
+│   ├── Message.sol
+│   ├── MessageOnlyOwner.sol
+│   ├── Counter.sol
+│   └── Counter.t.sol
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── page.tsx
+│   │   │   ├── pageOnlyOwner.tsx
+│   │   │   └── Message.json
+│   │   └── lib/
+│   ├── package.json
+│   └── next.config.ts
+├── scripts/
+│   └── deploy-message.ts
+├── test/
+│   └── Message.ts
+├── screenshots/
+├── hardhat.config.ts
+├── package.json
+└── README.md
+```
+
+## Prerequisites
+
+Install the following before running the project:
+
+- Node.js and npm
+- Git
+- MetaMask browser extension
+- Visual Studio Code or another code editor
+
+## Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ShahnoorElahi/message-dapp.git
+cd message-dapp
+```
+
+### 2. Install Smart Contract Dependencies
+
+Run this command from the project root:
+
+```bash
+npm install
+```
+
+### 3. Start the Local Blockchain
+
+Open a terminal in the project root and run:
+
+```bash
+npx hardhat node
+```
+
+Keep this terminal running. It provides the local blockchain RPC endpoint:
+
+`http://127.0.0.1:8545`
+
+The local Hardhat network uses chain ID `31337`.
+
+### 4. Deploy the Smart Contract
+
+Open a second terminal in the project root and run:
+
+```bash
+npx hardhat run scripts/deploy-message.ts --network localhost
+```
+
+Copy the contract address printed in the terminal.
+
+**Important:** When deploying to a fresh local blockchain, verify that the contract address configured in the frontend matches the newly deployed contract. Ensure the frontend ABI matches `Message.sol` as well.
+
+### 5. Configure MetaMask
+
+Configure a local development network in MetaMask:
+
+- Network name: Hardhat Local
+- RPC URL: `http://127.0.0.1:8545`
+- Chain ID: `31337`
+- Currency symbol: `ETH`
+
+For local testing, import a test account using a private key provided by the local Hardhat node. Use only local development accounts and never use a real wallet's private key or recovery phrase.
+
+### 6. Install Frontend Dependencies
+
+Open a third terminal:
+
+```bash
+cd frontend
+npm install
+```
+
+### 7. Run the Frontend
+
+From the `frontend` directory:
+
+```bash
+npm run dev
+```
+
+Open the URL printed by Next.js, normally:
+
+`http://localhost:3000`
+
+Connect MetaMask, select the Hardhat Local network, and test reading and updating the message.
+
+## Running Tests
+
+From the project root:
+
+```bash
 npx hardhat test
 ```
 
-You can also selectively run the Solidity or `mocha` tests:
+The tests cover smart contract behavior, including message retrieval and updates by different accounts.
 
-```shell
-npx hardhat test solidity
-npx hardhat test mocha
-```
+## Important Notes
 
-### Make a deployment to Sepolia
+- This project is configured for local blockchain development by default.
+- Local blockchain data is temporary and may reset when the local node is restarted.
+- The contract address may change when deploying to a new network or a fresh chain.
+- Local Hardhat test accounts and their private keys are for development only.
+- This project has not been documented here as a production or mainnet deployment.
 
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
+## Future Improvements
 
-To run the deployment to a local chain:
+- Deploy the contract to a public test network.
+- Host the Next.js frontend.
+- Add automated deployment and integration testing.
+- Improve wallet event handling and cross-wallet live updates.
 
-```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
-```
+## Author
 
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
+**Shahnoor Elahi**
 
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
+GitHub: [@ShahnoorElahi](https://github.com/ShahnoorElahi)
 
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
-
-```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
-```
-
-After setting the variable, you can run the deployment with the Sepolia network:
-
-```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
-```
+Project Repository: [message-dapp](https://github.com/ShahnoorElahi/message-dapp)
